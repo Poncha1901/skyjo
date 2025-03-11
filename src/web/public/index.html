@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Game</title>
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+    <script>
+      const socket = io("http://localhost:3000");
+
+      // Listen for player join event
+      socket.on("playerJoined", (players) => {
+        updatePlayerList(players);
+      });
+
+      // Listen for game start event
+      socket.on("gameStarted", (cards) => {
+        displayCards(cards);
+      });
+
+      function updatePlayerList(players) {
+        const playerList = document.getElementById("player-list");
+        playerList.innerHTML = ""; // Clear existing list
+        players.forEach((player) => {
+          const li = document.createElement("li");
+          li.textContent = player.name; // Assuming player object has a name property
+          playerList.appendChild(li);
+        });
+      }
+
+      function displayCards(cards) {
+        const cardDisplay = document.getElementById("card-display");
+        cardDisplay.innerHTML = ""; // Clear existing cards
+        cards.forEach((card) => {
+          const div = document.createElement("div");
+          div.textContent = card; // Display card value
+          cardDisplay.appendChild(div);
+        });
+      }
+    </script>
+  </head>
+  <body>
+    <h1>Game Room</h1>
+    <h2>Players:</h2>
+    <ul id="player-list">
+      <!-- Player names will be dynamically added here -->
+    </ul>
+
+    <h2>Your Cards:</h2>
+    <div id="card-display">
+      <!-- Cards will be dynamically displayed here -->
+    </div>
+  </body>
+</html>
